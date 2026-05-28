@@ -1,0 +1,137 @@
+flowchart LR
+
+subgraph 0["app"]
+1["_layout.tsx"]
+O["index.tsx"]
+end
+2["global.css"]
+subgraph 3["node_modules"]
+subgraph 4[".pnpm"]
+subgraph 5["expo-router@6.0.23_@expo+metro-runtime@6.1.2_@types+react@19.1.17_expo-constants@18.0.1_e2b127107608ca6215014e72939b8be0"]
+subgraph 6["node_modules"]
+subgraph 7["expo-router"]
+subgraph 8["build"]
+9["index.js"]
+end
+end
+end
+end
+subgraph D["@tanstack+react-query@5.100.14_react@19.1.0"]
+subgraph E["node_modules"]
+subgraph F["@tanstack"]
+subgraph G["react-query"]
+subgraph H["build"]
+subgraph I["modern"]
+J["index.d.ts"]
+end
+end
+end
+end
+end
+end
+subgraph K["react@19.1.0"]
+subgraph L["node_modules"]
+subgraph M["react"]
+N["index.js"]
+end
+end
+end
+subgraph P["react-native@0.81.5_@babel+core@7.29.0_@types+react@19.1.17_react@19.1.0"]
+subgraph Q["node_modules"]
+subgraph R["react-native"]
+subgraph S["types"]
+T["index.d.ts"]
+end
+end
+end
+end
+subgraph 13["axios@1.16.1"]
+subgraph 14["node_modules"]
+subgraph 15["axios"]
+16["index.d.cts"]
+end
+end
+end
+end
+end
+subgraph A["presentation"]
+subgraph B["providers"]
+C["query-provider.tsx"]
+end
+subgraph U["hooks"]
+subgraph V["movies"]
+W["use-now-playing.ts"]
+1Q["use-search-movies.ts"]
+end
+end
+end
+subgraph X["config"]
+subgraph Y["api"]
+Z["movieApi.ts"]
+end
+end
+subgraph 10["infrastructure"]
+subgraph 11["adapters"]
+12["axios.adapter.ts"]
+end
+subgraph 1A["repositories"]
+1B["movie-db.repository.ts"]
+end
+subgraph 1G["interfaces"]
+1H["movie-db.responses.ts"]
+end
+subgraph 1I["mappers"]
+1J["movie.mapper.ts"]
+end
+end
+subgraph 17["core"]
+subgraph 18["adapters"]
+19["http.adapter.ts"]
+end
+subgraph 1C["entities"]
+1D["movie.entity.ts"]
+end
+subgraph 1E["repositories"]
+1F["movie.repository.ts"]
+end
+subgraph 1K["use-cases"]
+1L["index.ts"]
+subgraph 1M["movies"]
+1N["index.ts"]
+1O["get-now-playing.use-case.ts"]
+1P["search-movies.use-case.ts"]
+end
+end
+end
+1-->2
+1-->C
+1-->9
+C-->J
+C-->N
+O-->W
+O-->T
+W-->Z
+W-->1L
+W-->J
+Z-->12
+Z-->1B
+12-->19
+12-->16
+1B-->19
+1B-->1D
+1B-->1F
+1B-->1H
+1B-->1J
+1F-->1D
+1J-->1D
+1J-->1H
+1L-->1N
+1N-->1O
+1N-->1P
+1O-->1D
+1O-->1F
+1P-->1D
+1P-->1F
+1Q-->Z
+1Q-->1L
+1Q-->J
