@@ -1,3 +1,4 @@
+import type { GestureResponderEvent } from 'react-native';
 import { Pressable, View } from 'react-native';
 import { Image } from 'expo-image';
 import Animated, {
@@ -8,9 +9,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import type { GestureResponderEvent } from 'react-native';
 import { Movie } from '@/core/entities/movie.entity';
-import { colors } from '@/config/theme/colors';
+import { useTheme } from '@/presentation/providers/theme-provider';
 
 interface Props {
   movie: Movie;
@@ -19,18 +19,19 @@ interface Props {
   onPress?: (e: GestureResponderEvent) => void;
 }
 
-const posterShadow = {
-  shadowColor: colors.ink.DEFAULT,
-  shadowOffset: { width: 0, height: 6 },
-  shadowOpacity: 0.15,
-  shadowRadius: 12,
-  elevation: 6,
-} as const;
-
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const Poster = ({ movie, width, height, onPress }: Props) => {
+  const { colors } = useTheme();
   const hasPoster = movie.posterPath !== 'no-poster';
+
+  const posterShadow = {
+    shadowColor: colors.ink.DEFAULT,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
+  } as const;
 
   const reducedMotion = useReducedMotion();
   const progress = useSharedValue(0);
@@ -48,7 +49,8 @@ const Poster = ({ movie, width, height, onPress }: Props) => {
   };
 
   const onPressOut = () => {
-    if (!reducedMotion) progress.value = withSpring(0, { damping: 14, stiffness: 220 });
+    if (!reducedMotion)
+      progress.value = withSpring(0, { damping: 14, stiffness: 220 });
   };
 
   return (
@@ -59,14 +61,14 @@ const Poster = ({ movie, width, height, onPress }: Props) => {
       accessible
       accessibilityRole="image"
       accessibilityLabel={`Póster de ${movie.title}`}
-      style={[{ width, height }, posterShadow, animatedStyle]}
-      className="rounded-[13px] bg-paper">
-      <View className="flex-1 overflow-hidden rounded-[13px] border border-line bg-line">
+      style={[{ width, height, backgroundColor: colors.paper }, posterShadow, animatedStyle]}
+      className="rounded-[13px]">
+      <View className="flex-1 overflow-hidden rounded-[13px] border" style={{ borderColor: colors.line, backgroundColor: colors.line }}>
         {hasPoster ? (
           <Image
             source={{ uri: movie.posterPath }}
             recyclingKey={String(movie.id)}
-            contentFit="cover"
+            contentFit="contain"
             transition={300}
             cachePolicy="memory-disk"
             style={{ width: '100%', height: '100%' }}

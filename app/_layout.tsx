@@ -14,9 +14,25 @@ import {
 } from 'react-native-safe-area-context';
 import '../global.css';
 import { QueryProvider } from '@/presentation/providers/query-provider';
-import { colors } from '@/config/theme/colors';
+import { ThemeProvider, useTheme } from '@/presentation/providers/theme-provider';
 
 SplashScreen.preventAutoHideAsync();
+
+const AppContent = () => {
+  const { colors, isDark } = useTheme();
+
+  return (
+    <>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.paper },
+        }}
+      />
+    </>
+  );
+};
 
 const RootLayout = () => {
   const [fontsLoaded] = useFonts({
@@ -35,15 +51,11 @@ const RootLayout = () => {
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <QueryProvider>
-        <StatusBar style="dark" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: colors.paper },
-          }}
-        />
-      </QueryProvider>
+      <ThemeProvider>
+        <QueryProvider>
+          <AppContent />
+        </QueryProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 };

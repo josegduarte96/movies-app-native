@@ -102,7 +102,11 @@ export class MovieDBRepository extends MovieRepository {
           params: { query, page },
         },
       );
-      return MovieMapper.fromResponseToPaginated(data);
+      const paginated = MovieMapper.fromResponseToPaginated(data);
+      paginated.results.sort(
+        (a, b) => b.releaseDate.getTime() - a.releaseDate.getTime(),
+      );
+      return paginated;
     } catch (error) {
       console.error('searchMovies failed', error);
       throw new Error('Could not search movies');
