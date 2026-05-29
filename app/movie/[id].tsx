@@ -22,8 +22,10 @@ import Animated, {
 import { useGetMovieDetails } from '@/presentation/hooks/movies/use-get-details';
 import { colors } from '@/config/theme/colors';
 import MovieDetailHero from '@/presentation/components/movies/MovieDetailHero';
+import CastList from '@/presentation/components/movies/CastList';
+import { useGetMovieCredits } from '@/presentation/hooks/movies/use-get-movie-credits';
 
-const HERO_RATIO = 0.62;
+const HERO_RATIO = 0.7;
 
 const Loader = ({ height }: { height: number }) => (
   <View style={{ height }} className="items-center justify-center bg-paper">
@@ -55,6 +57,7 @@ export default function MovieDetailScreen() {
   const router = useRouter();
   const reducedMotion = useReducedMotion();
   const { data, isLoading } = useGetMovieDetails(Number(id));
+  const { data: cast } = useGetMovieCredits(Number(id));
 
   const backOffsetTop = insets.top + 16;
   const backScale = useSharedValue(1);
@@ -106,7 +109,7 @@ export default function MovieDetailScreen() {
 
         <Animated.View
           entering={
-            !reducedMotion ? FadeInDown.duration(500).delay(200) : undefined
+            !reducedMotion ? FadeInDown.duration(300).delay(200) : undefined
           }
           className="px-6 pt-6">
           <View className="flex-row gap-4">
@@ -139,11 +142,14 @@ export default function MovieDetailScreen() {
             </View>
           ) : null}
 
+          <CastList cast={cast ?? []} />
+
           {data.productionCompanies.length > 0 ? (
-            <View className="mt-8">
+            <View>
               <Text className="font-editorial uppercase tracking-[3px] text-accent">
                 Producción
               </Text>
+              <View className="mt-2 h-px bg-line" />
               <View className="mt-2 flex-row flex-wrap gap-4">
                 {data.productionCompanies.map((c) => (
                   <View
@@ -180,6 +186,7 @@ export default function MovieDetailScreen() {
               <Text className="font-editorial text-sm uppercase tracking-[3px] text-accent">
                 Idiomas
               </Text>
+              <View className="mt-2 h-px bg-line" />
               <View className="mt-2 flex-row flex-wrap gap-2">
                 {data.spokenLanguages.map((l) => (
                   <MetadataChip key={l.iso639_1} label={l.englishName} />
@@ -193,6 +200,7 @@ export default function MovieDetailScreen() {
               <Text className="font-editorial uppercase tracking-[3px] text-accent">
                 Sitio web
               </Text>
+              <View className="mt-2 h-px bg-line" />
               <Pressable
                 onPress={() => WebBrowser.openBrowserAsync(data.homepage)}
                 hitSlop={8}>

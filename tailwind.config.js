@@ -12,11 +12,11 @@ module.exports = {
     extend: {
       // Paleta editorial: fuente única en config/theme/colors.js.
       colors,
-      // Neuton: serif editorial de transición, lectura cálida tipo revista.
+      // Lora: serif calligráfica contemporánea, métricas limpias en pantalla.
       fontFamily: {
-        display: ['Neuton_700Bold'],
-        editorial: ['Neuton_400Regular'],
-        'editorial-italic': ['Neuton_400Regular_Italic'],
+        display: ['Lora_700Bold'],
+        editorial: ['Lora_400Regular'],
+        'editorial-italic': ['Lora_400Regular_Italic'],
       },
     },
   },

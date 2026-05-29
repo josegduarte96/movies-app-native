@@ -1,60 +1,112 @@
-import { ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   useNowPlaying,
   usePopularsMovies,
+  useSearchMovies,
   useTopRatedMovies,
 } from '@/presentation/hooks/movies';
-import { MainSlideshow } from '@/presentation/components/movies';
+import {
+  HomeHeader,
+  MainSlideshow,
+  SearchResults,
+} from '@/presentation/components/movies';
 import SectionLoader from '@/presentation/components/ui/SectionLoader';
+import { Movie } from '@/core/entities/movie.entity';
+
+interface Section {
+  title: string;
+  movies: Movie[];
+  isLoading: boolean;
+  fetchNextPage: () => void;
+}
 
 const flattenPages = <T,>(
   data: { pages: { results: T[] }[] } | undefined,
 ): T[] => data?.pages.flatMap((p) => p.results) ?? [];
 
-const HomeScreen = () => {
-  const nowPlaying = useNowPlaying();
-  const popular = usePopularsMovies();
-  const topRated = useTopRatedMovies();
+const MovieFeed = ({
+  sections,
+  bottomInset,
+}: {
+  sections: Section[];
+  bottomInset: number;
+}) => (
+  <ScrollView
+    className="flex-1"
+    keyboardDismissMode="on-drag"
+    keyboardShouldPersistTaps="handled"
+    contentContainerStyle={{ paddingBottom: bottomInset }}>
+    <View className="mt-7">
+      {sections.map(({ title, movies, isLoading, fetchNextPage }) =>
+        isLoading ? (
+          <SectionLoader key={title} />
+        ) : (
+          <MainSlideshow
+            key={title}
+            movies={movies}
+            title={title}
+            loadNextMovies={fetchNextPage}
+          />
+        ),
+      )}
+    </View>
+  </ScrollView>
+);
 
-  const sections = [
+const HomeScreen = () => {
+  const insets = useSafeAreaInsets();
+  const [searchQuery, setSearchQuery] = useState('');
+  const search = useSearchMovies(searchQuery);
+  const nowPlaying = useNowPlaying();
+  const topRated = useTopRatedMovies();
+  const popular = usePopularsMovies();
+
+  const sections: Section[] = [
     {
-      query: nowPlaying,
-      movies: flattenPages(nowPlaying.data),
       title: 'En cartelera',
+      movies: flattenPages(nowPlaying.data),
+      isLoading: nowPlaying.isLoading,
+      fetchNextPage: nowPlaying.fetchNextPage,
     },
     {
-      query: topRated,
-      movies: flattenPages(topRated.data),
       title: 'Mejor calificadas',
+      movies: flattenPages(topRated.data),
+      isLoading: topRated.isLoading,
+      fetchNextPage: topRated.fetchNextPage,
     },
-    { query: popular, movies: flattenPages(popular.data), title: 'Populares' },
+    {
+      title: 'Populares',
+      movies: flattenPages(popular.data),
+      isLoading: popular.isLoading,
+      fetchNextPage: popular.fetchNextPage,
+    },
   ];
 
+  const isSearching = searchQuery.trim().length > 0;
+
   return (
-    <SafeAreaView className="flex-1 bg-paper">
-      <ScrollView className="flex-1">
-        <Text className="px-6 pt-2 font-display text-3xl text-ink">
-          Movies App
-        </Text>
-        <View className="mt-7">
-          {sections.map(
-            ({ query: { isLoading, fetchNextPage }, movies, title }, index) =>
-              isLoading ? (
-                <SectionLoader key={index} />
-              ) : (
-                <MainSlideshow
-                  key={index}
-                  movies={movies}
-                  title={title}
-                  loadNextMovies={fetchNextPage}
-                />
-              ),
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <View className="flex-1 bg-paper" style={{ paddingTop: insets.top }}>
+      <HomeHeader onQueryChange={setSearchQuery} />
+
+      <View className="flex-1">
+        <MovieFeed sections={sections} bottomInset={insets.bottom} />
+        {isSearching && (
+          <View className="absolute inset-0 bg-paper">
+            <SearchResults
+              movies={flattenPages(search.data)}
+              isLoading={search.isLoading}
+              isError={search.isError}
+              hasNextPage={search.hasNextPage}
+              fetchNextPage={search.fetchNextPage}
+              bottomInset={insets.bottom}
+            />
+          </View>
+        )}
+      </View>
+    </View>
   );
 };
 

@@ -3,14 +3,14 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import {
+  Lora_400Regular,
+  Lora_400Regular_Italic,
+  Lora_700Bold,
   useFonts,
-  Neuton_400Regular,
-  Neuton_400Regular_Italic,
-  Neuton_700Bold,
-} from '@expo-google-fonts/neuton';
+} from '@expo-google-fonts/lora';
 import {
-  SafeAreaProvider,
   initialWindowMetrics,
+  SafeAreaProvider,
 } from 'react-native-safe-area-context';
 import '../global.css';
 import { QueryProvider } from '@/presentation/providers/query-provider';
@@ -20,9 +20,9 @@ SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
   const [fontsLoaded] = useFonts({
-    Neuton_400Regular,
-    Neuton_400Regular_Italic,
-    Neuton_700Bold,
+    Lora_400Regular,
+    Lora_400Regular_Italic,
+    Lora_700Bold,
   });
 
   useEffect(() => {

@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-28T00:00:00Z",
+  "title": "Design System: Movies App",
+  "extensions": {
+    "colorMeta": {
+      "brick-red": {
+        "role": "primary",
+        "displayName": "Brick Red",
+        "canonical": "oklch(52% 0.15 28)",
+        "tonalRamp": [
+          "oklch(22% 0.07 28)",
+          "oklch(31% 0.10 28)",
+          "oklch(40% 0.13 28)",
+          "oklch(52% 0.15 28)",
+          "oklch(62% 0.13 28)",
+          "oklch(74% 0.09 28)",
+          "oklch(85% 0.05 28)",
+          "oklch(94% 0.02 28)"
+        ]
+      },
+      "brick-red-soft": {
+        "role": "secondary",
+        "displayName": "Soft Brick",
+        "canonical": "oklch(70% 0.09 24)",
+        "tonalRamp": [
+          "oklch(30% 0.07 24)",
+          "oklch(40% 0.09 24)",
+          "oklch(50% 0.10 24)",
+          "oklch(60% 0.10 24)",
+          "oklch(70% 0.09 24)",
+          "oklch(80% 0.06 24)",
+          "oklch(88% 0.04 24)",
+          "oklch(95% 0.02 24)"
+        ]
+      },
+      "warm-paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "oklch(96% 0.011 80)",
+        "tonalRamp": [
+          "oklch(22% 0.006 60)",
+          "oklch(34% 0.008 70)",
+          "oklch(48% 0.009 75)",
+          "oklch(62% 0.010 78)",
+          "oklch(74% 0.011 80)",
+          "oklch(85% 0.011 80)",
+          "oklch(92% 0.011 80)",
+          "oklch(96% 0.011 80)"
+        ]
+      },
+      "warm-ink": {
+        "role": "neutral",
+        "displayName": "Warm Ink",
+        "canonical": "oklch(24% 0.012 50)",
+        "tonalRamp": [
+          "oklch(18% 0.010 45)",
+          "oklch(24% 0.012 50)",
+          "oklch(34% 0.012 55)",
+          "oklch(46% 0.012 60)",
+          "oklch(58% 0.011 65)",
+          "oklch(72% 0.010 70)",
+          "oklch(85% 0.008 75)",
+          "oklch(94% 0.005 80)"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "oklch(54% 0.018 70)",
+        "tonalRamp": [
+          "oklch(28% 0.012 60)",
+          "oklch(38% 0.015 65)",
+          "oklch(46% 0.017 68)",
+          "oklch(54% 0.018 70)",
+          "oklch(66% 0.016 72)",
+          "oklch(78% 0.012 75)",
+          "oklch(88% 0.008 78)",
+          "oklch(95% 0.004 80)"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(90% 0.012 75)",
+        "tonalRamp": [
+          "oklch(30% 0.010 65)",
+          "oklch(42% 0.012 68)",
+          "oklch(54% 0.013 70)",
+          "oklch(66% 0.013 72)",
+          "oklch(78% 0.012 74)",
+          "oklch(86% 0.012 75)",
+          "oklch(90% 0.012 75)",
+          "oklch(96% 0.008 78)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Movie detail titles. Largest voice, once per screen." },
+      "headline": { "displayName": "Headline", "purpose": "Home masthead and detail section headings." },
+      "title": { "displayName": "Title", "purpose": "Search-result titles and movie-card names." },
+      "body": { "displayName": "Body", "purpose": "Overviews, synopsis prose, descriptions." },
+      "body-italic": { "displayName": "Body Italic", "purpose": "Taglines under detail titles. The only italic." },
+      "label": { "displayName": "Label", "purpose": "Tracked uppercase Brick Red eyebrows and category tags." }
+    },
+    "shadows": [
+      { "name": "poster-rest", "value": "0 6px 12px rgba(28,24,21,0.15)", "purpose": "Resting lift under every poster. The system's only shadow at rest." },
+      { "name": "poster-press", "value": "0 6px 18px rgba(28,24,21,0.30)", "purpose": "Momentary rise on touch, paired with a 1.04 scale and a light haptic." }
+    ],
+    "motion": [
+      { "name": "press-in", "value": "120ms linear (scale to 1.04, shadow deepen)", "purpose": "Poster touch-in feedback." },
+      { "name": "press-out", "value": "spring(damping 14, stiffness 220)", "purpose": "Poster release settle." },
+      { "name": "row-press", "value": "spring(damping 20, stiffness 320, mass 0.5)", "purpose": "Search-result row press scale to 0.97." },
+      { "name": "enter-section", "value": "FadeInDown 500ms / FadeIn 600ms delay 120ms", "purpose": "Carousel header and content reveal on mount." },
+      { "name": "skeleton-pulse", "value": "800ms ease in-out alternate, opacity 0.45 to 0.85", "purpose": "Loading row pulse." }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Search Bar",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Paper field with hairline border; border and icon turn Brick Red on focus.",
+      "html": "<div class=\"ds-search\"><svg class=\"ds-search-icon\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"7\"></circle><line x1=\"16.5\" y1=\"16.5\" x2=\"21\" y2=\"21\"></line></svg><input class=\"ds-search-input\" type=\"text\" placeholder=\"Buscar películas...\" /></div>",
+      "css": ".ds-search { display: flex; align-items: center; gap: 12px; background: #F6F4ED; border: 1px solid #E4DED1; border-radius: 12px; padding: 8px 16px; transition: border-color 0.2s; } .ds-search:focus-within { border-color: #B23A30; } .ds-search-icon { color: #7A7164; transition: color 0.2s; flex-shrink: 0; } .ds-search:focus-within .ds-search-icon { color: #B23A30; } .ds-search-input { flex: 1; border: none; outline: none; background: transparent; color: #1C1815; font-family: 'Lora', Georgia, serif; font-size: 16px; } .ds-search-input::placeholder { color: #7A7164; }"
+    },
+    {
+      "name": "Section Label",
+      "kind": "custom",
+      "refersTo": "section-label",
+      "description": "Tracked uppercase Brick Red eyebrow used for carousel categories and detail sections.",
+      "html": "<span class=\"ds-label\">En cartelera</span>",
+      "css": ".ds-label { font-family: 'Lora', Georgia, serif; font-size: 12px; font-weight: 400; text-transform: uppercase; letter-spacing: 3px; color: #B23A30; }"
+    },
+    {
+      "name": "Carousel Section Header",
+      "kind": "custom",
+      "refersTo": "section-label",
+      "description": "Signature masthead device: Brick Red category label left, tabular counter right, hairline rule beneath.",
+      "html": "<div class=\"ds-secthead\"><div class=\"ds-secthead-row\"><span class=\"ds-label\">En cartelera</span><span class=\"ds-counter\">01 / 12</span></div><div class=\"ds-rule\"></div></div>",
+      "css": ".ds-secthead { padding: 0 24px; } .ds-secthead-row { display: flex; align-items: baseline; justify-content: space-between; } .ds-label { font-family: 'Lora', Georgia, serif; font-size: 12px; text-transform: uppercase; letter-spacing: 3px; color: #B23A30; } .ds-counter { font-family: 'Lora', Georgia, serif; font-size: 16px; color: #7A7164; font-variant-numeric: tabular-nums; } .ds-rule { height: 1px; background: #E4DED1; margin-top: 12px; }"
+    },
+    {
+      "name": "Metadata Chip",
+      "kind": "chip",
+      "refersTo": "chip-metadata",
+      "description": "Read-only hairline-fill chip for runtime, year, status, language.",
+      "html": "<span class=\"ds-chip\">128 min</span>",
+      "css": ".ds-chip { display: inline-block; background: #E4DED1; color: #1C1815; font-family: 'Lora', Georgia, serif; font-size: 16px; border-radius: 4px; padding: 8px; }"
+    },
+    {
+      "name": "Search Result Row",
+      "kind": "card",
+      "refersTo": "list-item-result",
+      "description": "Hairline-separated row: poster thumbnail, title, soft-brick year, two-line overview. Scales on press.",
+      "html": "<div class=\"ds-row\"><div class=\"ds-row-thumb\"></div><div class=\"ds-row-body\"><span class=\"ds-row-title\">Blade Runner 2049</span><span class=\"ds-row-year\">2017</span><span class=\"ds-row-overview\">Thirty years after the events of the first film, a new blade runner unearths a long-buried secret.</span></div></div>",
+      "css": ".ds-row { display: flex; gap: 16px; padding: 12px 24px; border-bottom: 1px solid #E4DED1; transition: transform 0.15s; cursor: pointer; } .ds-row:active { transform: scale(0.97); } .ds-row-thumb { width: 60px; height: 90px; flex-shrink: 0; border-radius: 8px; background: #E4DED1; } .ds-row-body { display: flex; flex-direction: column; justify-content: center; } .ds-row-title { font-family: 'Lora', Georgia, serif; font-weight: 700; font-size: 18px; color: #1C1815; } .ds-row-year { font-family: 'Lora', Georgia, serif; font-size: 14px; color: #D98A82; margin-top: 2px; } .ds-row-overview { font-family: 'Lora', Georgia, serif; font-size: 14px; line-height: 1.4; color: #7A7164; margin-top: 4px; }"
+    },
+    {
+      "name": "Poster",
+      "kind": "card",
+      "refersTo": "input-search",
+      "description": "The only true card and the only shadow. Lifts and scales on press.",
+      "html": "<div class=\"ds-poster\"></div>",
+      "css": ".ds-poster { width: 150px; height: 225px; border-radius: 13px; border: 1px solid #E4DED1; background: #E4DED1; box-shadow: 0 6px 12px rgba(28,24,21,0.15); transition: transform 0.12s, box-shadow 0.12s; cursor: pointer; } .ds-poster:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(28,24,21,0.30); }"
+    },
+    {
+      "name": "Detail Back Button",
+      "kind": "nav",
+      "refersTo": "section-label",
+      "description": "Circular translucent-dark control floating over the hero image. The one dark control, allowed only on imagery.",
+      "html": "<button class=\"ds-back\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"19\" y1=\"12\" x2=\"5\" y2=\"12\"></line><polyline points=\"12 19 5 12 12 5\"></polyline></svg></button>",
+      "css": ".ds-back { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); cursor: pointer; transition: transform 0.1s; } .ds-back:active { transform: scale(0.88); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Repertory Programme",
+    "overview": "An arthouse cinema's printed programme rendered as a mobile app. Warm paper stock, a single restrained ink, one heat of red reserved for headings and section tags. It is curatorial, not commercial: posters lead, type carries the hierarchy, and the chrome recedes until you need it. Lora, a contemporary calligraphic serif, runs the entire surface, with no sans and no second voice. The system rejects the streaming-app reflex (no dark UI, no glossy gradients), the TMDB/IMDB data-dump, and the dark-blue-plus-teal category default. The answer to 'movie app' here is paper and ink. Density is low and deliberate: three curated carousels, generous gutters, hairline rules instead of boxes.",
+    "keyCharacteristics": [
+      "Warm paper-and-ink palette, never pure black or white",
+      "One serif family (Lora) for everything: display, body, labels",
+      "Brick red used sparingly, on labels and section tags only",
+      "Hairlines and whitespace instead of cards and containers",
+      "Flat by default; only posters carry depth"
+    ],
+    "rules": [
+      { "name": "The Spot-Color Rule", "body": "Brick Red is ink applied by a single pass of the press. It marks labels and rules, never fills a button, card, or bar. If red covers more than roughly 10% of a screen, it has stopped being a spot color.", "section": "colors" },
+      { "name": "The No-Pure-Tone Rule", "body": "Every neutral is tinted toward the brick hue. Pure #000 and #fff are forbidden; the page is paper, and paper is warm.", "section": "colors" },
+      { "name": "The One Voice Rule", "body": "Lora is the only typeface. No sans, no system stack, no monospace. Numeric counters use tabular-nums so figures stay aligned, but they stay in Lora.", "section": "typography" },
+      { "name": "The Tracked-Label Rule", "body": "Every label-tier element is uppercase with 3px letter-spacing and set in Brick Red. This is the system's signature; a lowercase or black label is wrong.", "section": "typography" },
+      { "name": "The Flat-Chrome Rule", "body": "Chrome is printed flat. Search bars, headers, chips, list rows, and nav all sit at zero elevation. The poster shadow is a deliberate, single exception, not a system of layers.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep Brick Red on labels, section tags, the masthead rule, and state icons only, never as a fill (The Spot-Color Rule).",
+      "Do set every label uppercase in Lora with 3px tracking and Brick Red color (The Tracked-Label Rule).",
+      "Do tint all neutrals warm; use Warm Paper (#F6F4ED) and Warm Ink (#1C1815), never #fff or #000.",
+      "Do separate rows and sections with 1px Hairline rules and whitespace instead of cards or boxes.",
+      "Do reserve depth for posters; let everything else sit flat (The Flat-Chrome Rule).",
+      "Do use skeleton rows for content loading and a Brick Red indicator for pagination.",
+      "Do keep the 24px gutter consistent across home, search, and detail."
+    ],
+    "donts": [
+      "Don't make this look like a streaming app (Netflix, HBO, Prime, Disney+): no dark UI, no glossy gradients, no commercial chrome.",
+      "Don't drift toward the TMDB / IMDB data-dump: no dense tables, no cluttered metadata grids.",
+      "Don't fall into the category-default dark-blue-plus-teal movie app. The answer is paper and ink.",
+      "Don't introduce a second typeface. Lora carries display, body, and labels (The One Voice Rule).",
+      "Don't put a shadow on any chrome surface (search bar, header, chip, row). Only posters lift.",
+      "Don't use a border-left or border-right colored stripe as an accent on rows or cards. Use full Hairline borders or nothing.",
+      "Don't fill buttons, bars, or large areas with Brick Red; its rarity is the point.",
+      "Don't wrap text content in cards when a rule and spacing will do."
+    ]
+  }
+}

@@ -3,3 +3,4 @@ export { searchMoviesUseCase } from './search-movies.use-case';
 export { getPopularsUseCase } from './get-populars.use-case';
 export { getTopRatedUseCase } from './get-top-rated.use-case';
 export { getByIdUseCase } from './get-by-id.use-case';
+export { getMovieCreditsUseCase } from './get-movie-credits.use-case';

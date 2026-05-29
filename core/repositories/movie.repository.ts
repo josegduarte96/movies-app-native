@@ -1,6 +1,7 @@
 import { Movie } from '@/core/entities/movie.entity';
 import { MovieDetail } from '@/core/entities/movie-detail.entity';
 import { Paginated } from '@/core/entities/paginated.entity';
+import { MovieCredits } from '@/core/entities/movie-credits.entity';
 
 /**
  * Port del dominio. Define QUÉ se puede pedir en términos de entidades,
@@ -15,6 +16,10 @@ export abstract class MovieRepository {
   abstract getNowPlaying(options: Options): Promise<Paginated<Movie>>;
   abstract getPopular(options: Options): Promise<Paginated<Movie>>;
   abstract getTopRated(options: Options): Promise<Paginated<Movie>>;
-  abstract searchMovies(query: string, options: Options): Promise<Paginated<Movie>>;
+  abstract searchMovies(
+    query: string,
+    options: Options,
+  ): Promise<Paginated<Movie>>;
   abstract getMovieById(id: number): Promise<MovieDetail | undefined>;
+  abstract getMovieCredits(id: number): Promise<MovieCredits[] | undefined>;
 }

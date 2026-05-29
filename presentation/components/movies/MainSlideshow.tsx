@@ -89,9 +89,9 @@ const MainSlideshow = ({ movies, title, loadNextMovies }: Props) => {
   }
 
   return (
-    <View>
+    <View className="py-4">
       <Animated.View
-        entering={FadeInDown.duration(500)}
+        entering={FadeInDown.duration(300)}
         className="flex-row items-baseline justify-between px-6">
         <Text className="font-editorial uppercase tracking-[3px] text-accent">
           {title}
