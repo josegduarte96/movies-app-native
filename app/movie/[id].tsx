@@ -193,9 +193,9 @@ export default function MovieDetailScreen() {
           entering={
             reducedMotion ? undefined : FadeInDown.duration(500).delay(200)
           }
-          className="px-6 pt-6">
+          className="pt-6">
           {eyebrow ? (
-            <View className="mb-3">
+            <View className="mb-3 px-6">
               <ThemedText
                 tone="accent"
                 style={{
@@ -212,7 +212,7 @@ export default function MovieDetailScreen() {
 
           <ThemedText
             style={{ fontSize: 36, lineHeight: 40 }}
-            className="font-display">
+            className="px-6 font-display">
             {data.title}
           </ThemedText>
 
@@ -220,12 +220,12 @@ export default function MovieDetailScreen() {
             <ThemedText
               tone="soft"
               style={{ fontSize: 20, lineHeight: 27 }}
-              className="mt-2 font-editorial-italic">
+              className="mt-2 px-6 font-editorial-italic">
               {data.tagline}
             </ThemedText>
           ) : null}
 
-          <View className="mt-5 flex-row flex-wrap gap-2.5">
+          <View className="mt-5 flex-row flex-wrap gap-2.5 px-6">
             {data.runtime > 0 ? (
               <MetaChip label={`${data.runtime} min`} />
             ) : null}
@@ -234,7 +234,7 @@ export default function MovieDetailScreen() {
           </View>
 
           {data.overview ? (
-            <View className="mt-7">
+            <View className="mt-7 px-6">
               <ThemedText
                 style={{ fontSize: 28, lineHeight: 32 }}
                 className="font-display">
@@ -251,7 +251,7 @@ export default function MovieDetailScreen() {
           <CastList cast={cast ?? []} />
 
           {data.productionCompanies.length > 0 ? (
-            <View className="mt-7">
+            <View className="mt-7 px-6">
               <Eyebrow>Producción</Eyebrow>
               <View className="mt-3 flex-col flex-wrap gap-4">
                 {data.productionCompanies.map((company) => (
@@ -302,7 +302,7 @@ export default function MovieDetailScreen() {
           ) : null}
 
           {data.spokenLanguages.length > 0 ? (
-            <View className="mt-7">
+            <View className="mt-7 px-6">
               <Eyebrow>Idiomas</Eyebrow>
               <View className="mt-3 flex-row flex-wrap gap-2.5">
                 {data.spokenLanguages.map((lang) => (

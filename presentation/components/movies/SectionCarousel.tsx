@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Animated, {
   FadeIn,
   useAnimatedReaction,
@@ -10,12 +11,14 @@ import Animated, {
 import { scheduleOnRN } from 'react-native-worklets';
 
 import { Movie } from '@/core/entities/movie.entity';
+import { ThemedIcon } from '@/presentation/components/ui/ThemedIcon';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
 import { ThemedView } from '@/presentation/components/ui/ThemedView';
 import PosterCard from './PosterCard';
 
 interface Props {
   title: string;
+  icon?: keyof typeof Ionicons.glyphMap;
   movies: Movie[];
   order?: number;
   onOpen: (movie: Movie) => void;
@@ -39,6 +42,7 @@ const AnimatedMovieList = Animated.FlatList<Movie>;
  */
 const SectionCarousel = ({
   title,
+  icon,
   movies,
   order = 0,
   onOpen,
@@ -67,11 +71,7 @@ const SectionCarousel = ({
 
   const renderItem = useCallback(
     ({ item }: { item: Movie }) => (
-      <PosterCard
-        movie={item}
-        width={POSTER_WIDTH}
-        onPress={() => onOpen(item)}
-      />
+      <PosterCard movie={item} width={POSTER_WIDTH} onPress={() => onOpen(item)} />
     ),
     [onOpen],
   );
@@ -84,12 +84,22 @@ const SectionCarousel = ({
     <Animated.View entering={entering} className="mt-7">
       {/* Cabecera: etiqueta roja + contador tabular, ambos en la línea base. */}
       <View className="flex-row items-baseline justify-between px-6">
-        <ThemedText
-          tone="accent"
-          style={{ fontSize: 13, letterSpacing: 3 }}
-          className="font-editorial uppercase">
-          {title}
-        </ThemedText>
+        <View className="flex-row items-center">
+          {icon ? (
+            <ThemedIcon
+              tone="accent"
+              name={icon}
+              size={15}
+              style={{ marginRight: 7 }}
+            />
+          ) : null}
+          <ThemedText
+            tone="accent"
+            style={{ fontSize: 13, letterSpacing: 3 }}
+            className="font-editorial uppercase">
+            {title}
+          </ThemedText>
+        </View>
         <ThemedText
           tone="soft"
           style={{ fontSize: 15, fontVariant: ['tabular-nums'] }}
@@ -109,8 +119,7 @@ const SectionCarousel = ({
         scrollEventThrottle={16}
         snapToInterval={SNAP}
         snapToAlignment="start"
-        decelerationRate="fast"
-        disableIntervalMomentum
+        decelerationRate="normal"
         ItemSeparatorComponent={() => <View style={{ width: GAP }} />}
         contentContainerStyle={{
           paddingHorizontal: GUTTER,

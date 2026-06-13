@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated from 'react-native-reanimated';
@@ -20,6 +21,7 @@ import { Movie } from '@/core/entities/movie.entity';
 
 interface Section {
   title: string;
+  icon: keyof typeof Ionicons.glyphMap;
   movies: Movie[];
   isLoading: boolean;
   isError: boolean;
@@ -58,6 +60,7 @@ const HomeScreen = () => {
   const sections: Section[] = [
     {
       title: 'En cartelera',
+      icon: 'ticket-outline',
       movies: flattenPages(nowPlaying.data),
       isLoading: nowPlaying.isLoading,
       isError: nowPlaying.isError,
@@ -65,6 +68,7 @@ const HomeScreen = () => {
     },
     {
       title: 'Mejor calificadas',
+      icon: 'star-outline',
       movies: flattenPages(topRated.data),
       isLoading: topRated.isLoading,
       isError: topRated.isError,
@@ -72,6 +76,7 @@ const HomeScreen = () => {
     },
     {
       title: 'Populares',
+      icon: 'flame-outline',
       movies: flattenPages(popular.data),
       isLoading: popular.isLoading,
       isError: popular.isError,
@@ -122,6 +127,7 @@ const HomeScreen = () => {
               <SectionCarousel
                 key={section.title}
                 title={section.title}
+                icon={section.icon}
                 movies={section.movies}
                 order={index}
                 onOpen={openMovie}

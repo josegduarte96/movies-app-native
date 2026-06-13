@@ -1,5 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import {
@@ -21,6 +27,22 @@ SplashScreen.preventAutoHideAsync();
 const AppContent = () => {
   const { colors, isDark } = useTheme();
 
+  // Crossfade global al alternar tema: una capa con el nuevo `paper` cubre la
+  // pantalla y se desvanece, revelando el contenido ya recoloreado. Se omite en
+  // el primer render para no tapar la apertura de la portada.
+  const fade = useSharedValue(0);
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    fade.value = 1;
+    fade.value = withTiming(0, { duration: 340 });
+  }, [isDark, fade]);
+
+  const overlayStyle = useAnimatedStyle(() => ({ opacity: fade.value }));
+
   return (
     <>
       <StatusBar style={isDark ? 'light' : 'dark'} />
@@ -29,6 +51,14 @@ const AppContent = () => {
           headerShown: false,
           contentStyle: { backgroundColor: colors.paper },
         }}
+      />
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          StyleSheet.absoluteFill,
+          { backgroundColor: colors.paper, zIndex: 999 },
+          overlayStyle,
+        ]}
       />
     </>
   );

@@ -1,6 +1,14 @@
 import { Pressable, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { useTheme } from '@/presentation/providers/theme-provider';
 
@@ -10,9 +18,34 @@ interface Props {
 }
 
 const NAMEPLATE_REST = 30;
+// Apertura escalonada de la portada: el cliché sube tras la regla, luego la
+// regla + standfirst, y por último el buscador. Cada paso 110ms después.
+const COVER_MS = 520;
+const COVER_STEP = 110;
 
 const HomeHeader = ({ topInset, onSearch }: Props) => {
-  const { colors, isDark } = useTheme();
+  const { colors, isDark, toggleTheme } = useTheme();
+  const reducedMotion = useReducedMotion();
+  const reveal = (step: number) =>
+    reducedMotion
+      ? undefined
+      : FadeInDown.duration(COVER_MS).delay(step * COVER_STEP);
+
+  // Gira el icono media vuelta y le da un rebote al alternar el tema.
+  const scale = useSharedValue(1);
+  const iconStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const onToggle = () => {
+    if (!reducedMotion) {
+      scale.value = withSequence(
+        withTiming(0.8, { duration: 130 }),
+        withTiming(1, { duration: 220 }),
+      );
+    }
+    toggleTheme();
+  };
 
   return (
     <Animated.View
@@ -30,24 +63,53 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
         },
       ]}
       className="px-6 pb-2.5">
-      <Animated.View className="overflow-hidden">
-        <Animated.Text
-          numberOfLines={1}
-          style={[
-            {
-              fontSize: NAMEPLATE_REST,
-              lineHeight: NAMEPLATE_REST,
-              letterSpacing: -0.5,
-              transformOrigin: 'left top',
-              color: colors.ink.DEFAULT,
-            },
-          ]}
-          className="font-display">
-          Cinemateca
-        </Animated.Text>
-      </Animated.View>
+      <View className="flex-row items-center justify-between">
+        <Animated.View className="flex-1 overflow-hidden">
+          <Animated.Text
+            entering={reveal(0)}
+            numberOfLines={1}
+            style={[
+              {
+                fontSize: NAMEPLATE_REST,
+                lineHeight: NAMEPLATE_REST,
+                letterSpacing: -0.5,
+                transformOrigin: 'left top',
+                color: colors.ink.DEFAULT,
+              },
+            ]}
+            className="font-display">
+            Cinemateca
+          </Animated.Text>
+        </Animated.View>
 
-      <Animated.View className="overflow-hidden">
+        <Animated.View
+          entering={reducedMotion ? undefined : FadeIn.duration(420).delay(80)}>
+          <Pressable
+            onPress={onToggle}
+            hitSlop={10}
+            accessibilityRole="switch"
+            accessibilityState={{ checked: isDark }}
+            accessibilityLabel={
+              isDark ? 'Activar modo claro' : 'Activar modo oscuro'
+            }
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.6 : 1,
+              borderColor: colors.line,
+              backgroundColor: colors.paper,
+            })}
+            className="ml-3 h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-[#7A7164]">
+            <Animated.View style={iconStyle}>
+              <Ionicons
+                name={isDark ? 'sunny-outline' : 'moon-outline'}
+                size={20}
+                color={colors.ink.DEFAULT}
+              />
+            </Animated.View>
+          </Pressable>
+        </Animated.View>
+      </View>
+
+      <Animated.View entering={reveal(1)} className="overflow-hidden">
         <View>
           <View
             className="mb-3 mt-3.5 h-[3px] w-16"
@@ -61,23 +123,30 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
         </View>
       </Animated.View>
 
-      <Pressable
-        onPress={onSearch}
-        accessibilityRole="button"
-        accessibilityLabel="Buscar películas"
-        style={({ pressed }) => ({
-          opacity: pressed ? 0.6 : 1,
-          borderColor: colors.line,
-          backgroundColor: colors.paper,
-        })}
-        className="mb-1.5 mt-6 flex-row items-center rounded-xl border-[1.5px] border-ink-soft px-4 py-3">
-        <Ionicons name="search-outline" size={19} color={colors.ink.soft} />
-        <Text
-          style={{ fontSize: 16, color: colors.ink.soft }}
-          className="ml-2.5 font-editorial">
-          Buscar películas
-        </Text>
-      </Pressable>
+      <Animated.View
+        entering={
+          reducedMotion
+            ? undefined
+            : FadeIn.duration(420).delay(2 * COVER_STEP + 80)
+        }>
+        <Pressable
+          onPress={onSearch}
+          accessibilityRole="button"
+          accessibilityLabel="Buscar películas"
+          style={({ pressed }) => ({
+            opacity: pressed ? 0.6 : 1,
+            borderColor: colors.line,
+            backgroundColor: colors.paper,
+          })}
+          className="mb-1.5 mt-6 flex-row items-center rounded-xl border-[1.5px] border-ink-soft px-4 py-3">
+          <Ionicons name="search-outline" size={19} color={colors.ink.soft} />
+          <Text
+            style={{ fontSize: 16, color: colors.ink.soft }}
+            className="ml-2.5 font-editorial">
+            Buscar películas
+          </Text>
+        </Pressable>
+      </Animated.View>
     </Animated.View>
   );
 };

@@ -173,7 +173,7 @@ const SearchScreen = () => {
 
   return (
     <ThemedView className="flex-1" style={{ paddingTop: insets.top }}>
-      <Stack.Screen options={{ headerShown: false, animation: 'fade' }} />
+      <Stack.Screen options={{ headerShown: false, animation: 'flip' }} />
 
       {/* Cabecera: volver + campo de búsqueda con borde rojo en foco. */}
       <View className="flex-row items-center gap-3 px-6 pb-4 pt-2">
