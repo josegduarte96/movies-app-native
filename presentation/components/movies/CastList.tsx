@@ -79,10 +79,8 @@ const CastItem = ({
             height: AVATAR,
             borderRadius: AVATAR / 2,
             borderWidth: 1,
-            borderColor: colors.line,
-            backgroundColor: colors.line,
           }}
-          className="items-center justify-center">
+          className="items-center justify-center border-line bg-line">
           <ThemedText
             tone="soft"
             style={{ fontSize: 20 }}

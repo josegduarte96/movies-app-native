@@ -20,7 +20,10 @@ import {
 } from 'react-native-safe-area-context';
 import '../global.css';
 import { QueryProvider } from '@/presentation/providers/query-provider';
-import { ThemeProvider, useTheme } from '@/presentation/providers/theme-provider';
+import {
+  ThemeProvider,
+  useTheme,
+} from '@/presentation/providers/theme-provider';
 
 SplashScreen.preventAutoHideAsync();
 

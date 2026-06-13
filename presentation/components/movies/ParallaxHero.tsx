@@ -59,12 +59,12 @@ const ParallaxHero = ({ uri, heroHeight, scrollY }: Props) => {
 
   return (
     <View
+      className="bg-line"
       style={{
         height: heroHeight,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         overflow: 'hidden',
-        backgroundColor: colors.line,
         shadowColor: colors.ink.DEFAULT,
         shadowOffset: { width: 0, height: 14 },
         shadowOpacity: 0.22,

@@ -23,8 +23,16 @@ const NAMEPLATE_REST = 30;
 const COVER_MS = 520;
 const COVER_STEP = 110;
 
+// Icono y etiqueta por modo de tema (el botón cicla system → light → dark).
+const MODE_ICON = {
+  system: 'phone-portrait-outline',
+  light: 'sunny-outline',
+  dark: 'moon-outline',
+} as const;
+const MODE_LABEL = { system: 'sistema', light: 'claro', dark: 'oscuro' };
+
 const HomeHeader = ({ topInset, onSearch }: Props) => {
-  const { colors, isDark, toggleTheme } = useTheme();
+  const { colors, mode, cycleTheme } = useTheme();
   const reducedMotion = useReducedMotion();
   const reveal = (step: number) =>
     reducedMotion
@@ -44,7 +52,7 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
         withTiming(1, { duration: 220 }),
       );
     }
-    toggleTheme();
+    cycleTheme();
   };
 
   return (
@@ -56,13 +64,12 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
         {
           paddingTop: topInset,
           zIndex: 10,
-          backgroundColor: colors.paper,
           shadowColor: colors.ink.DEFAULT,
           shadowOffset: { width: 0, height: 10 },
           shadowRadius: 22,
         },
       ]}
-      className="px-6 pb-2.5">
+      className="bg-paper px-6 pb-2.5">
       <View className="flex-row items-center justify-between">
         <Animated.View className="flex-1 overflow-hidden">
           <Animated.Text
@@ -74,10 +81,9 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
                 lineHeight: NAMEPLATE_REST,
                 letterSpacing: -0.5,
                 transformOrigin: 'left top',
-                color: colors.ink.DEFAULT,
               },
             ]}
-            className="font-display">
+            className="font-display text-ink">
             Cinemateca
           </Animated.Text>
         </Animated.View>
@@ -87,20 +93,13 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
           <Pressable
             onPress={onToggle}
             hitSlop={10}
-            accessibilityRole="switch"
-            accessibilityState={{ checked: isDark }}
-            accessibilityLabel={
-              isDark ? 'Activar modo claro' : 'Activar modo oscuro'
-            }
-            style={({ pressed }) => ({
-              opacity: pressed ? 0.6 : 1,
-              borderColor: colors.line,
-              backgroundColor: colors.paper,
-            })}
-            className="ml-3 h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-[#7A7164]">
+            accessibilityRole="button"
+            accessibilityLabel={`Tema ${MODE_LABEL[mode]}, tocar para cambiar`}
+            style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+            className="ml-3 h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-ink-soft bg-paper">
             <Animated.View style={iconStyle}>
               <Ionicons
-                name={isDark ? 'sunny-outline' : 'moon-outline'}
+                name={MODE_ICON[mode]}
                 size={20}
                 color={colors.ink.DEFAULT}
               />
@@ -111,13 +110,8 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
 
       <Animated.View entering={reveal(1)} className="overflow-hidden">
         <View>
-          <View
-            className="mb-3 mt-3.5 h-[3px] w-16"
-            style={{ backgroundColor: colors.accent.DEFAULT }}
-          />
-          <Text
-            className="font-editorial-italic text-xl"
-            style={{ color: colors.ink.soft }}>
+          <View className="mb-3 mt-3.5 h-[3px] w-16 bg-accent" />
+          <Text className="font-editorial-italic text-xl text-ink-soft">
             una sala de repertorio
           </Text>
         </View>
@@ -133,16 +127,12 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
           onPress={onSearch}
           accessibilityRole="button"
           accessibilityLabel="Buscar películas"
-          style={({ pressed }) => ({
-            opacity: pressed ? 0.6 : 1,
-            borderColor: colors.line,
-            backgroundColor: colors.paper,
-          })}
-          className="mb-1.5 mt-6 flex-row items-center rounded-xl border-[1.5px] border-ink-soft px-4 py-3">
+          style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+          className="mb-1.5 mt-6 flex-row items-center rounded-xl border-[1.5px] border-ink-soft bg-paper px-4 py-3">
           <Ionicons name="search-outline" size={19} color={colors.ink.soft} />
           <Text
-            style={{ fontSize: 16, color: colors.ink.soft }}
-            className="ml-2.5 font-editorial">
+            style={{ fontSize: 16 }}
+            className="ml-2.5 font-editorial text-ink-soft">
             Buscar películas
           </Text>
         </Pressable>

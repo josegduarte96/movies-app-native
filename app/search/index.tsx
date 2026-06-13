@@ -15,7 +15,6 @@ import { SkeletonRow } from '@/presentation/components/ui/Skeleton';
 import { ThemedIcon } from '@/presentation/components/ui/ThemedIcon';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
 import { ThemedView } from '@/presentation/components/ui/ThemedView';
-import { useTheme } from '@/presentation/providers/theme-provider';
 import { Movie } from '@/core/entities/movie.entity';
 import MetaChip from '@/presentation/components/ui/MetaChip';
 
@@ -34,7 +33,6 @@ const flattenPages = (
 
 // Estado vacío inicial: invitación + chips de sugerencias (directores spot).
 const EmptyPrompt = ({ onPick }: { onPick: (term: string) => void }) => {
-  const { colors } = useTheme();
   return (
     <View className="px-6">
       <ThemedText
@@ -54,10 +52,8 @@ const EmptyPrompt = ({ onPick }: { onPick: (term: string) => void }) => {
             key={term}
             onPress={() => onPick(term)}
             accessibilityRole="button"
-            style={({ pressed }) => ({
-              opacity: pressed ? 0.6 : 1,
-              backgroundColor: colors.line,
-            })}>
+            style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+            className="bg-line">
             <MetaChip label={term} />
           </Pressable>
         ))}

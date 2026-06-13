@@ -9,7 +9,6 @@ import Animated, {
 
 import { Movie } from '@/core/entities/movie.entity';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
-import { useTheme } from '@/presentation/providers/theme-provider';
 
 interface Props {
   movie: Movie;
@@ -27,7 +26,6 @@ const PRESS_SPRING = { damping: 20, stiffness: 400, mass: 0.5 };
  * Se hunde a 0.97 con un spring tight al pulsar. Plano salvo la miniatura.
  */
 const ResultRow = ({ movie, onOpen }: Props) => {
-  const { colors } = useTheme();
   const reducedMotion = useReducedMotion();
   const year = movie.releaseDate.getFullYear();
   const hasPoster = movie.posterPath !== 'no-poster';
@@ -52,11 +50,11 @@ const ResultRow = ({ movie, onOpen }: Props) => {
       accessibilityRole="button"
       accessibilityLabel={`${movie.title}${Number.isNaN(year) ? '' : `, ${year}`}`}>
       <Animated.View
-        style={[{ borderColor: colors.line }, pressStyle]}
-        className="flex-row border-b px-6 py-3">
+        style={pressStyle}
+        className="flex-row border-b border-line px-6 py-3">
         <View
-          style={{ width: THUMB_WIDTH, height: THUMB_HEIGHT, backgroundColor: colors.line }}
-          className="overflow-hidden rounded-lg">
+          style={{ width: THUMB_WIDTH, height: THUMB_HEIGHT }}
+          className="overflow-hidden rounded-lg bg-line">
           {hasPoster ? (
             <Image
               source={{ uri: movie.posterPath }}

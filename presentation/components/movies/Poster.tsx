@@ -61,9 +61,9 @@ const Poster = ({ movie, width, height, onPress }: Props) => {
       accessible
       accessibilityRole="image"
       accessibilityLabel={`Póster de ${movie.title}`}
-      style={[{ width, height, backgroundColor: colors.paper }, posterShadow, animatedStyle]}
-      className="rounded-[13px]">
-      <View className="flex-1 overflow-hidden rounded-[13px] border" style={{ borderColor: colors.line, backgroundColor: colors.line }}>
+      style={[{ width, height }, posterShadow, animatedStyle]}
+      className="rounded-[13px] bg-paper">
+      <View className="flex-1 overflow-hidden rounded-[13px] border border-line bg-line">
         {hasPoster ? (
           <Image
             source={{ uri: movie.posterPath }}
