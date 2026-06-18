@@ -21,6 +21,7 @@ type Palette = {
   paper: string;
   ink: { DEFAULT: string; soft: string };
   line: string;
+  field: string;
   accent: { DEFAULT: string; soft: string };
 };
 

@@ -2,6 +2,7 @@ import { View } from 'react-native';
 
 import { Movie } from '@/core/entities/movie.entity';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
+import { formatYear } from '@/presentation/utils/format';
 import Poster from './Poster';
 
 interface Props {
@@ -11,11 +12,6 @@ interface Props {
 }
 
 const POSTER_RATIO = 1.5;
-
-const formatYear = (date: Date): string => {
-  const year = date.getFullYear();
-  return Number.isNaN(year) ? '' : String(year);
-};
 
 /**
  * Tarjeta de cartelera: póster TMDB (radio 13, sombra, spring al pulsar vía

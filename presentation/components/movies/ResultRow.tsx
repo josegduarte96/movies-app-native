@@ -9,6 +9,8 @@ import Animated, {
 
 import { Movie } from '@/core/entities/movie.entity';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
+import { formatYear } from '@/presentation/utils/format';
+import { SPRING } from '@/presentation/constants/motion';
 
 interface Props {
   movie: Movie;
@@ -17,8 +19,6 @@ interface Props {
 
 const THUMB_WIDTH = 60;
 const THUMB_HEIGHT = Math.round(THUMB_WIDTH * 1.5);
-// Spring "tight" del design system para filas (rápido, poco rebote).
-const PRESS_SPRING = { damping: 20, stiffness: 400, mass: 0.5 };
 
 /**
  * Fila de resultado de búsqueda separada por hairline (no es una tarjeta):
@@ -27,7 +27,7 @@ const PRESS_SPRING = { damping: 20, stiffness: 400, mass: 0.5 };
  */
 const ResultRow = ({ movie, onOpen }: Props) => {
   const reducedMotion = useReducedMotion();
-  const year = movie.releaseDate.getFullYear();
+  const year = formatYear(movie.releaseDate);
   const hasPoster = movie.posterPath !== 'no-poster';
 
   const scale = useSharedValue(1);
@@ -36,10 +36,10 @@ const ResultRow = ({ movie, onOpen }: Props) => {
   }));
 
   const onPressIn = () => {
-    if (!reducedMotion) scale.value = withSpring(0.97, PRESS_SPRING);
+    if (!reducedMotion) scale.value = withSpring(0.97, SPRING.row);
   };
   const onPressOut = () => {
-    scale.value = withSpring(1, PRESS_SPRING);
+    scale.value = withSpring(1, SPRING.row);
   };
 
   return (
@@ -48,7 +48,7 @@ const ResultRow = ({ movie, onOpen }: Props) => {
       onPressIn={onPressIn}
       onPressOut={onPressOut}
       accessibilityRole="button"
-      accessibilityLabel={`${movie.title}${Number.isNaN(year) ? '' : `, ${year}`}`}>
+      accessibilityLabel={`${movie.title}${year ? `, ${year}` : ''}`}>
       <Animated.View
         style={pressStyle}
         className="flex-row border-b border-line px-6 py-3">
@@ -71,7 +71,7 @@ const ResultRow = ({ movie, onOpen }: Props) => {
             className="font-display">
             {movie.title}
           </ThemedText>
-          {!Number.isNaN(year) ? (
+          {year ? (
             <ThemedText
               tone="accent-soft"
               style={{ fontSize: 14, fontVariant: ['tabular-nums'] }}

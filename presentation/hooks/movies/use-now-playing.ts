@@ -2,6 +2,11 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { movieRepository } from '@/config/api/movieApi';
 import { nowPlayingUseCase } from '@/core/use-cases';
+import {
+  DEFAULT_STALE_TIME,
+  getNextPageParam,
+  movieKeys,
+} from './movie-queries';
 
 /**
  * Infinite pagination: cada `fetchNextPage()` pide la página siguiente.
@@ -9,11 +14,10 @@ import { nowPlayingUseCase } from '@/core/use-cases';
  */
 export const useNowPlaying = () =>
   useInfiniteQuery({
-    queryKey: ['movies', 'now-playing'],
+    queryKey: movieKeys.nowPlaying(),
     queryFn: ({ pageParam }) =>
       nowPlayingUseCase(movieRepository, { page: pageParam }),
     initialPageParam: 1,
-    getNextPageParam: (last) =>
-      last.page < last.totalPages ? last.page + 1 : undefined,
-    staleTime: 1000 * 60 * 5,
+    getNextPageParam,
+    staleTime: DEFAULT_STALE_TIME,
   });

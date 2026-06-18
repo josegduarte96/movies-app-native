@@ -15,21 +15,12 @@ import { SkeletonRow } from '@/presentation/components/ui/Skeleton';
 import { ThemedIcon } from '@/presentation/components/ui/ThemedIcon';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
 import { ThemedView } from '@/presentation/components/ui/ThemedView';
-import { Movie } from '@/core/entities/movie.entity';
 import MetaChip from '@/presentation/components/ui/MetaChip';
-
-const DEBOUNCE_MS = 450;
-const SUGGESTIONS = [
-  'Capitan America',
-  'Batman',
-  'El Conjuro',
-  'Gru',
-  'Michael',
-];
-
-const flattenPages = (
-  data: { pages: { results: Movie[] }[] } | undefined,
-): Movie[] => data?.pages.flatMap((p) => p.results) ?? [];
+import { ROUTES } from '@/presentation/navigation/routes';
+import { flattenPages } from '@/presentation/utils/pagination';
+import { STRINGS } from '@/presentation/constants/strings';
+import { DURATION, OPACITY } from '@/presentation/constants/motion';
+import { EYEBROW } from '@/presentation/constants/typography';
 
 // Estado vacío inicial: invitación + chips de sugerencias (directores spot).
 const EmptyPrompt = ({ onPick }: { onPick: (term: string) => void }) => {
@@ -38,21 +29,23 @@ const EmptyPrompt = ({ onPick }: { onPick: (term: string) => void }) => {
       <ThemedText
         tone="soft"
         className="px-4 py-8 text-center font-editorial-italic text-[15px] leading-6">
-        Escribe un título o un director para empezar.
+        {STRINGS.search.prompt}
       </ThemedText>
       <ThemedText
         tone="accent"
-        style={{ fontSize: 12, letterSpacing: 3 }}
+        style={EYEBROW}
         className="mt-2 font-editorial uppercase">
-        Sugerencias
+        {STRINGS.search.suggestionsLabel}
       </ThemedText>
       <View className="mt-3.5 flex-row flex-wrap gap-2.5">
-        {SUGGESTIONS.map((term) => (
+        {STRINGS.search.suggestions.map((term) => (
           <Pressable
             key={term}
             onPress={() => onPick(term)}
             accessibilityRole="button"
-            style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+            style={({ pressed }) => ({
+              opacity: pressed ? OPACITY.pressed : 1,
+            })}
             className="bg-line">
             <MetaChip label={term} />
           </Pressable>
@@ -80,7 +73,7 @@ const SearchScreen = () => {
       return;
     }
     if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => setDebounced(trimmed), DEBOUNCE_MS);
+    timer.current = setTimeout(() => setDebounced(trimmed), DURATION.debounce);
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
@@ -121,8 +114,8 @@ const SearchScreen = () => {
       return (
         <StateBlock
           icon="alert-circle-outline"
-          label="Error"
-          body="No pudimos completar la búsqueda. Intenta de nuevo."
+          label={STRINGS.search.errorLabel}
+          body={STRINGS.search.errorBody}
         />
       );
     }
@@ -130,8 +123,8 @@ const SearchScreen = () => {
       return (
         <StateBlock
           icon="film-outline"
-          label="Sin resultados"
-          body={`No encontramos «${trimmed}». Prueba con otro título o director.`}
+          label={STRINGS.search.emptyLabel}
+          body={STRINGS.search.emptyBody(trimmed)}
         />
       );
     }
@@ -148,12 +141,7 @@ const SearchScreen = () => {
             <Animated.View entering={entering}>
               <ResultRow
                 movie={item}
-                onOpen={() =>
-                  router.push({
-                    pathname: '/movie/[id]',
-                    params: { id: String(item.id) },
-                  })
-                }
+                onOpen={() => router.push(ROUTES.movieDetail(item.id))}
               />
             </Animated.View>
           );
@@ -177,8 +165,10 @@ const SearchScreen = () => {
           onPress={() => router.back()}
           hitSlop={12}
           accessibilityRole="button"
-          accessibilityLabel="Volver"
-          style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
+          accessibilityLabel={STRINGS.a11y.back}
+          style={({ pressed }) => ({
+            opacity: pressed ? OPACITY.pressedStrong : 1,
+          })}>
           <ThemedIcon name="arrow-back" size={22} />
         </Pressable>
         <SearchField

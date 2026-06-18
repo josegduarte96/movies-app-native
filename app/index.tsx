@@ -1,5 +1,7 @@
 import { Redirect } from 'expo-router';
 
-const Index = () => <Redirect href="/home" />;
+import { ROUTES } from '@/presentation/navigation/routes';
+
+const Index = () => <Redirect href={ROUTES.home} />;
 
 export default Index;

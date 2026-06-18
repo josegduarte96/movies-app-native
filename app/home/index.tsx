@@ -18,6 +18,9 @@ import {
   SkeletonCard,
 } from '@/presentation/components/ui/Skeleton';
 import { Movie } from '@/core/entities/movie.entity';
+import { ROUTES } from '@/presentation/navigation/routes';
+import { flattenPages } from '@/presentation/utils/pagination';
+import { STRINGS } from '@/presentation/constants/strings';
 
 interface Section {
   title: string;
@@ -27,10 +30,6 @@ interface Section {
   isError: boolean;
   fetchNextPage: () => void;
 }
-
-const flattenPages = <T,>(
-  data: { pages: { results: T[] }[] } | undefined,
-): T[] => data?.pages.flatMap((p) => p.results) ?? [];
 
 // Skeleton de una sección: cabecera + hairline + tres tarjetas-póster.
 const SkeletonSection = () => {
@@ -59,24 +58,21 @@ const HomeScreen = () => {
 
   const sections: Section[] = [
     {
-      title: 'En cartelera',
-      icon: 'ticket-outline',
+      ...STRINGS.home.sections.nowPlaying,
       movies: flattenPages(nowPlaying.data),
       isLoading: nowPlaying.isLoading,
       isError: nowPlaying.isError,
       fetchNextPage: nowPlaying.fetchNextPage,
     },
     {
-      title: 'Mejor calificadas',
-      icon: 'star-outline',
+      ...STRINGS.home.sections.topRated,
       movies: flattenPages(topRated.data),
       isLoading: topRated.isLoading,
       isError: topRated.isError,
       fetchNextPage: topRated.fetchNextPage,
     },
     {
-      title: 'Populares',
-      icon: 'flame-outline',
+      ...STRINGS.home.sections.popular,
       movies: flattenPages(popular.data),
       isLoading: popular.isLoading,
       isError: popular.isError,
@@ -84,8 +80,7 @@ const HomeScreen = () => {
     },
   ];
 
-  const openMovie = (movie: Movie) =>
-    router.push({ pathname: '/movie/[id]', params: { id: String(movie.id) } });
+  const openMovie = (movie: Movie) => router.push(ROUTES.movieDetail(movie.id));
 
   const allLoading = sections.every((s) => s.isLoading);
   const allError = sections.every((s) => s.isError);
@@ -95,7 +90,7 @@ const HomeScreen = () => {
     <ThemedView className="flex-1">
       <HomeHeader
         topInset={insets.top}
-        onSearch={() => router.push('/search')}
+        onSearch={() => router.push(ROUTES.search)}
       />
 
       <Animated.ScrollView
@@ -112,14 +107,14 @@ const HomeScreen = () => {
         ) : allError ? (
           <StateBlock
             icon="cloud-offline-outline"
-            label="Algo salió mal"
-            body="No pudimos cargar la cartelera. Vuelve a intentarlo en un momento."
+            label={STRINGS.common.error}
+            body={STRINGS.home.errorBody}
           />
         ) : allEmpty ? (
           <StateBlock
             icon="film-outline"
-            label="Sin cartelera"
-            body="No hay estrenos ahora mismo. Vuelve más tarde para ver la nueva programación."
+            label={STRINGS.home.emptyTitle}
+            body={STRINGS.home.emptyBody}
           />
         ) : (
           sections.map((section, index) =>

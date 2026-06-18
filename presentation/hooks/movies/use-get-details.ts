@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { movieRepository } from '@/config/api/movieApi';
 import { getByIdUseCase } from '@/core/use-cases';
+import { DEFAULT_STALE_TIME, movieKeys } from './movie-queries';
 
 /**
  * Capa de presentación: React Query envuelve el use-case.
@@ -9,9 +10,9 @@ import { getByIdUseCase } from '@/core/use-cases';
  */
 export const useGetMovieDetails = (movieId: number) =>
   useQuery({
-    queryKey: ['movies', movieId],
+    queryKey: movieKeys.detail(movieId),
     queryFn: async () => {
       return getByIdUseCase(movieRepository, movieId);
     },
-    staleTime: 1000 * 60 * 5, // 5 min: datos "frescos", no refetch
+    staleTime: DEFAULT_STALE_TIME,
   });

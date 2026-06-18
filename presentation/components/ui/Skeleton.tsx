@@ -8,25 +8,34 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-const PULSE_MS = 800;
+import { useTheme } from '@/presentation/providers/theme-provider';
+import { DURATION, OPACITY } from '@/presentation/constants/motion';
 
 /**
  * Caja skeleton con pulso de opacidad 0.45 ↔ 0.85 en bucle (800ms). El relleno
  * es hairline — nunca un spinner para contenido (regla del design system). Cada
  * caja corre su propio shared value; respeta reduce-motion (queda estática).
+ * Usa el token `line` del tema, así que respeta el modo oscuro.
  */
 export const SkeletonBox = ({ style }: { style?: ViewStyle }) => {
+  const { colors } = useTheme();
   const reducedMotion = useReducedMotion();
-  const opacity = useSharedValue(0.45);
+  const opacity = useSharedValue<number>(OPACITY.skeletonMin);
 
   useEffect(() => {
     if (reducedMotion) return;
-    opacity.value = withRepeat(withTiming(0.85, { duration: PULSE_MS }), -1, true);
+    opacity.value = withRepeat(
+      withTiming(OPACITY.skeletonMax, { duration: DURATION.pulse }),
+      -1,
+      true,
+    );
   }, [reducedMotion, opacity]);
 
   const pulse = useAnimatedStyle(() => ({ opacity: opacity.value }));
 
-  return <Animated.View style={[{ backgroundColor: '#E4DED1' }, style, pulse]} />;
+  return (
+    <Animated.View style={[{ backgroundColor: colors.line }, style, pulse]} />
+  );
 };
 
 const POSTER_WIDTH = 150;
@@ -48,8 +57,12 @@ export const SkeletonCard = () => (
 );
 
 /** Fila de resultado skeleton: miniatura 60×90 + tres líneas de texto. */
-export const SkeletonRow = () => (
-  <View className="flex-row border-b px-6 py-3" style={{ borderColor: '#E4DED1' }}>
+export const SkeletonRow = () => {
+  const { colors } = useTheme();
+  return (
+  <View
+    className="flex-row border-b px-6 py-3"
+    style={{ borderColor: colors.line }}>
     <SkeletonBox style={{ width: 60, height: 90, borderRadius: 8 }} />
     <View className="ml-4 flex-1 pt-1">
       <SkeletonBox style={{ height: 16, width: '62%', borderRadius: 4 }} />
@@ -64,4 +77,5 @@ export const SkeletonRow = () => (
       />
     </View>
   </View>
-);
+  );
+};

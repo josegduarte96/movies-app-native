@@ -11,6 +11,8 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useTheme } from '@/presentation/providers/theme-provider';
+import { STRINGS } from '@/presentation/constants/strings';
+import { DURATION, OPACITY } from '@/presentation/constants/motion';
 
 interface Props {
   value: string;
@@ -21,7 +23,6 @@ interface Props {
 }
 
 const ICON_SIZE = 19;
-const FOCUS_MS = 160;
 
 /**
  * Campo de búsqueda con borde animado: en foco/uso la regla hairline pasa a
@@ -36,9 +37,9 @@ const SearchField = ({
   onSubmit,
   autoFocus,
 }: Props) => {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const reducedMotion = useReducedMotion();
-  const FIELD_REST_BORDER = isDark ? colors.ink.soft : '#CFC6B5';
+  const FIELD_REST_BORDER = colors.field;
   const [isFocused, setIsFocused] = useState(false);
   // "Activo" = en foco o con texto: mantiene el borde rojo mientras hay query.
   const active = isFocused || value.length > 0;
@@ -47,7 +48,7 @@ const SearchField = ({
   const setFocus = (next: boolean) => {
     setIsFocused(next);
     focus.value = withTiming(next || value.length > 0 ? 1 : 0, {
-      duration: reducedMotion ? 0 : FOCUS_MS,
+      duration: reducedMotion ? 0 : DURATION.focus,
     });
   };
 
@@ -79,13 +80,13 @@ const SearchField = ({
         onChangeText={onChangeText}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
-        placeholder="Buscar películas"
+        placeholder={STRINGS.search.placeholder}
         placeholderTextColor={colors.ink.soft}
         returnKeyType="search"
         onSubmitEditing={handleSubmit}
         style={{ fontSize: 16, color: colors.ink.DEFAULT }}
         className="ml-2.5 flex-1 p-0 font-editorial"
-        accessibilityLabel="Buscar películas"
+        accessibilityLabel={STRINGS.a11y.searchMovies}
       />
       {value.length > 0 ? (
         <Animated.View
@@ -94,8 +95,8 @@ const SearchField = ({
             onPress={onClear}
             hitSlop={8}
             accessibilityRole="button"
-            accessibilityLabel="Limpiar búsqueda"
-            style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
+            accessibilityLabel={STRINGS.a11y.clearSearch}
+            style={({ pressed }) => ({ opacity: pressed ? OPACITY.pressedStrong : 1 })}>
             <Ionicons
               name="close-circle"
               size={ICON_SIZE}

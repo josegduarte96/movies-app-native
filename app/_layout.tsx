@@ -24,6 +24,7 @@ import {
   ThemeProvider,
   useTheme,
 } from '@/presentation/providers/theme-provider';
+import { DURATION } from '@/presentation/constants/motion';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,7 +42,7 @@ const AppContent = () => {
       return;
     }
     fade.value = 1;
-    fade.value = withTiming(0, { duration: 340 });
+    fade.value = withTiming(0, { duration: DURATION.themeFade });
   }, [isDark, fade]);
 
   const overlayStyle = useAnimatedStyle(() => ({ opacity: fade.value }));

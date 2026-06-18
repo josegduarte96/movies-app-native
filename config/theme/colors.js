@@ -21,6 +21,7 @@ const lightColors = {
     soft: '#7A7164', // secundario / metadatos
   },
   line: '#E4DED1', // hairlines y bordes finos
+  field: '#CFC6B5', // borde en reposo de inputs (SearchField)
   accent: {
     DEFAULT: '#B23A30', // rojo editorial (ladrillo)
     soft: '#D98A82',
@@ -34,6 +35,7 @@ const darkColors = {
     soft: '#A09A8E',
   },
   line: '#2D2D38',
+  field: '#A09A8E', // = ink.soft oscuro (borde en reposo en dark)
   accent: {
     DEFAULT: '#D98A82',
     soft: '#8B2D25',

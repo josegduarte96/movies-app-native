@@ -24,15 +24,20 @@ import { SkeletonBox } from '@/presentation/components/ui/Skeleton';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
 import { ThemedView } from '@/presentation/components/ui/ThemedView';
 import { useTheme } from '@/presentation/providers/theme-provider';
+import { STRINGS } from '@/presentation/constants/strings';
+import { OPACITY, SPRING } from '@/presentation/constants/motion';
+import { EYEBROW, EYEBROW_LG, TYPE } from '@/presentation/constants/typography';
+import { formatYear } from '@/presentation/utils/format';
 
 const HERO_RATIO = 0.62;
-const BACK_SPRING = { damping: 12, stiffness: 220 };
+// Icono blanco del botón volver sobre el overlay oscuro (intencional).
+const OVERLAY_ICON = '#ffffff';
 
 // Eyebrow: etiqueta tracked en mayúsculas, rojo ladrillo (la firma del sistema).
 const Eyebrow = ({ children }: { children: string }) => (
   <ThemedText
     tone="accent"
-    style={{ fontSize: 12, letterSpacing: 3 }}
+    style={EYEBROW}
     className="font-editorial uppercase">
     {children}
   </ThemedText>
@@ -105,16 +110,16 @@ const BackButton = ({
       <Pressable
         onPress={onPress}
         onPressIn={() => {
-          if (!reducedMotion) scale.value = withSpring(0.88, BACK_SPRING);
+          if (!reducedMotion) scale.value = withSpring(0.88, SPRING.back);
         }}
         onPressOut={() => {
-          scale.value = withSpring(1, BACK_SPRING);
+          scale.value = withSpring(1, SPRING.back);
         }}
         hitSlop={12}
         accessibilityRole="button"
-        accessibilityLabel="Volver"
+        accessibilityLabel={STRINGS.a11y.back}
         className="h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/40">
-        <Ionicons name="arrow-back" size={22} color="#ffffff" />
+        <Ionicons name="arrow-back" size={22} color={OVERLAY_ICON} />
       </Pressable>
     </Animated.View>
   );
@@ -157,21 +162,17 @@ export default function MovieDetailScreen() {
         <View className="flex-1 justify-center">
           <StateBlock
             icon="cloud-offline-outline"
-            label="Algo salió mal"
-            body="No pudimos cargar la información de esta película."
+            label={STRINGS.common.error}
+            body={STRINGS.detail.errorBody}
           />
         </View>
       </ThemedView>
     );
   }
 
-  const year = data.releaseDate.getFullYear();
+  const year = formatYear(data.releaseDate);
   const country = data.originCountry?.[0];
-  const eyebrow = country
-    ? `${country} · ${Number.isNaN(year) ? '' : year}`.trim()
-    : Number.isNaN(year)
-      ? ''
-      : String(year);
+  const eyebrow = country ? `${country} · ${year}`.trim() : year;
 
   return (
     <ThemedView className="flex-1">
@@ -198,11 +199,7 @@ export default function MovieDetailScreen() {
             <View className="mb-3 px-6">
               <ThemedText
                 tone="accent"
-                style={{
-                  fontSize: 13,
-                  letterSpacing: 3,
-                  fontVariant: ['tabular-nums'],
-                }}
+                style={[EYEBROW_LG, { fontVariant: ['tabular-nums'] }]}
                 className="font-editorial uppercase">
                 {eyebrow}
               </ThemedText>
@@ -210,16 +207,14 @@ export default function MovieDetailScreen() {
             </View>
           ) : null}
 
-          <ThemedText
-            style={{ fontSize: 36, lineHeight: 40 }}
-            className="px-6 font-display">
+          <ThemedText style={TYPE.title} className="px-6 font-display">
             {data.title}
           </ThemedText>
 
           {data.tagline ? (
             <ThemedText
               tone="soft"
-              style={{ fontSize: 20, lineHeight: 27 }}
+              style={TYPE.tagline}
               className="mt-2 px-6 font-editorial-italic">
               {data.tagline}
             </ThemedText>
@@ -229,20 +224,16 @@ export default function MovieDetailScreen() {
             {data.runtime > 0 ? (
               <MetaChip label={`${data.runtime} min`} />
             ) : null}
-            {!Number.isNaN(year) ? <MetaChip label={String(year)} /> : null}
+            {year ? <MetaChip label={year} /> : null}
             {data.status ? <MetaChip label={data.status} /> : null}
           </View>
 
           {data.overview ? (
             <View className="mt-7 px-6">
-              <ThemedText
-                style={{ fontSize: 28, lineHeight: 32 }}
-                className="font-display">
-                Sinopsis
+              <ThemedText style={TYPE.sectionHeading} className="font-display">
+                {STRINGS.detail.synopsis}
               </ThemedText>
-              <ThemedText
-                style={{ fontSize: 16, lineHeight: 25 }}
-                className="mt-2.5 font-editorial">
+              <ThemedText style={TYPE.body} className="mt-2.5 font-editorial">
                 {data.overview}
               </ThemedText>
             </View>
@@ -252,7 +243,7 @@ export default function MovieDetailScreen() {
 
           {data.productionCompanies.length > 0 ? (
             <View className="mt-7 px-6">
-              <Eyebrow>Producción</Eyebrow>
+              <Eyebrow>{STRINGS.detail.production}</Eyebrow>
               <View className="mt-3 flex-col flex-wrap gap-4">
                 {data.productionCompanies.map((company) => (
                   <View
@@ -303,7 +294,7 @@ export default function MovieDetailScreen() {
 
           {data.spokenLanguages.length > 0 ? (
             <View className="mt-7 px-6">
-              <Eyebrow>Idiomas</Eyebrow>
+              <Eyebrow>{STRINGS.detail.languages}</Eyebrow>
               <View className="mt-3 flex-row flex-wrap gap-2.5">
                 {data.spokenLanguages.map((lang) => (
                   <MetaChip key={lang.iso639_1} label={lang.englishName} />
@@ -314,11 +305,13 @@ export default function MovieDetailScreen() {
 
           {data.homepage ? (
             <View className="mt-7">
-              <Eyebrow>Sitio web</Eyebrow>
+              <Eyebrow>{STRINGS.detail.website}</Eyebrow>
               <Pressable
                 onPress={() => WebBrowser.openBrowserAsync(data.homepage)}
                 hitSlop={8}
-                style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}>
+                style={({ pressed }) => ({
+                  opacity: pressed ? OPACITY.pressed : 1,
+                })}>
                 <ThemedText
                   style={{
                     fontSize: 15,

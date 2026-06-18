@@ -3,6 +3,7 @@ import Animated, { FadeIn, useReducedMotion } from 'react-native-reanimated';
 
 import { ThemedIcon } from '@/presentation/components/ui/ThemedIcon';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
+import { EYEBROW } from '@/presentation/constants/typography';
 
 interface Props {
   icon: keyof typeof Ionicons.glyphMap;
@@ -29,7 +30,7 @@ const StateBlock = ({ icon, label, body }: Props) => {
       <ThemedIcon tone="accent" name={icon} size={40} />
       <ThemedText
         tone="accent"
-        style={{ fontSize: 12, letterSpacing: 3 }}
+        style={EYEBROW}
         className="mt-4 font-editorial uppercase">
         {label}
       </ThemedText>

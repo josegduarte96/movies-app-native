@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useTheme } from '@/presentation/providers/theme-provider';
+import { DURATION, SHADOW } from '@/presentation/constants/motion';
 
 interface Props {
   uri: string;
@@ -66,16 +67,13 @@ const ParallaxHero = ({ uri, heroHeight, scrollY }: Props) => {
         borderBottomRightRadius: 20,
         overflow: 'hidden',
         shadowColor: colors.ink.DEFAULT,
-        shadowOffset: { width: 0, height: 14 },
-        shadowOpacity: 0.22,
-        shadowRadius: 32,
-        elevation: 16,
+        ...SHADOW.hero,
       }}>
       {hasImage ? (
         <AnimatedImage
           source={{ uri }}
           contentFit="fill"
-          transition={400}
+          transition={DURATION.heroImage}
           cachePolicy="memory-disk"
           style={[
             {

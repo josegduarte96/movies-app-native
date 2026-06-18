@@ -11,6 +11,8 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useTheme } from '@/presentation/providers/theme-provider';
+import { STRINGS } from '@/presentation/constants/strings';
+import { COVER_STEP, DURATION, OPACITY, SHADOW } from '@/presentation/constants/motion';
 
 interface Props {
   topInset: number;
@@ -18,26 +20,23 @@ interface Props {
 }
 
 const NAMEPLATE_REST = 30;
-// Apertura escalonada de la portada: el cliché sube tras la regla, luego la
-// regla + standfirst, y por último el buscador. Cada paso 110ms después.
-const COVER_MS = 520;
-const COVER_STEP = 110;
 
-// Icono y etiqueta por modo de tema (el botón cicla system → light → dark).
+// Icono por modo de tema (el botón cicla system → light → dark).
 const MODE_ICON = {
   system: 'phone-portrait-outline',
   light: 'sunny-outline',
   dark: 'moon-outline',
 } as const;
-const MODE_LABEL = { system: 'sistema', light: 'claro', dark: 'oscuro' };
 
 const HomeHeader = ({ topInset, onSearch }: Props) => {
   const { colors, mode, cycleTheme } = useTheme();
   const reducedMotion = useReducedMotion();
+  // Apertura escalonada de la portada: el cliché sube tras la regla, luego la
+  // regla + standfirst, y por último el buscador. Cada paso 110ms después.
   const reveal = (step: number) =>
     reducedMotion
       ? undefined
-      : FadeInDown.duration(COVER_MS).delay(step * COVER_STEP);
+      : FadeInDown.duration(DURATION.cover).delay(step * COVER_STEP);
 
   // Gira el icono media vuelta y le da un rebote al alternar el tema.
   const scale = useSharedValue(1);
@@ -59,14 +58,13 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
     <Animated.View
       accessible
       accessibilityRole="header"
-      accessibilityLabel={'Cinemateca'}
+      accessibilityLabel={STRINGS.brand.name}
       style={[
         {
           paddingTop: topInset,
           zIndex: 10,
           shadowColor: colors.ink.DEFAULT,
-          shadowOffset: { width: 0, height: 10 },
-          shadowRadius: 22,
+          ...SHADOW.header,
         },
       ]}
       className="bg-paper px-6 pb-2.5">
@@ -84,7 +82,7 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
               },
             ]}
             className="font-display text-ink">
-            Cinemateca
+            {STRINGS.brand.name}
           </Animated.Text>
         </Animated.View>
 
@@ -94,8 +92,8 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
             onPress={onToggle}
             hitSlop={10}
             accessibilityRole="button"
-            accessibilityLabel={`Tema ${MODE_LABEL[mode]}, tocar para cambiar`}
-            style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+            accessibilityLabel={STRINGS.a11y.themeToggle(STRINGS.themeModes[mode])}
+            style={({ pressed }) => ({ opacity: pressed ? OPACITY.pressed : 1 })}
             className="ml-3 h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-ink-soft bg-paper">
             <Animated.View style={iconStyle}>
               <Ionicons
@@ -112,7 +110,7 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
         <View>
           <View className="mb-3 mt-3.5 h-[3px] w-16 bg-accent" />
           <Text className="font-editorial-italic text-xl text-ink-soft">
-            una sala de repertorio
+            {STRINGS.brand.tagline}
           </Text>
         </View>
       </Animated.View>
@@ -126,14 +124,14 @@ const HomeHeader = ({ topInset, onSearch }: Props) => {
         <Pressable
           onPress={onSearch}
           accessibilityRole="button"
-          accessibilityLabel="Buscar películas"
-          style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+          accessibilityLabel={STRINGS.a11y.searchMovies}
+          style={({ pressed }) => ({ opacity: pressed ? OPACITY.pressed : 1 })}
           className="mb-1.5 mt-6 flex-row items-center rounded-xl border-[1.5px] border-ink-soft bg-paper px-4 py-3">
           <Ionicons name="search-outline" size={19} color={colors.ink.soft} />
           <Text
             style={{ fontSize: 16 }}
             className="ml-2.5 font-editorial text-ink-soft">
-            Buscar películas
+            {STRINGS.search.placeholder}
           </Text>
         </Pressable>
       </Animated.View>

@@ -19,24 +19,16 @@ import Animated, {
 import type { MovieCredits } from '@/core/entities/movie-credits.entity';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
 import { useTheme } from '@/presentation/providers/theme-provider';
+import { initials } from '@/presentation/utils/format';
+import { STRINGS } from '@/presentation/constants/strings';
+import { AUTO_SPEED, RESUME_DELAY } from '@/presentation/constants/motion';
+import { EYEBROW } from '@/presentation/constants/typography';
 
 interface Props {
   cast: MovieCredits[];
 }
 
 const AVATAR = 68;
-// Velocidad del autoplay del carrusel de reparto (px/s). Lento, tipo marquesina.
-const AUTO_SPEED = 100;
-// Inactividad tras interacción manual antes de reanudar el autoplay.
-const RESUME_DELAY = 2500;
-
-const initials = (name: string) =>
-  name
-    .split(' ')
-    .slice(0, 2)
-    .map((word) => word.charAt(0))
-    .join('')
-    .toUpperCase();
 
 const CastItem = ({
   member,
@@ -191,9 +183,9 @@ const CastList = ({ cast }: Props) => {
       className="mt-7">
       <ThemedText
         tone="accent"
-        style={{ fontSize: 12, letterSpacing: 3 }}
+        style={EYEBROW}
         className="px-6 font-editorial uppercase">
-        Reparto
+        {STRINGS.cast.heading}
       </ThemedText>
       <Animated.ScrollView
         ref={aref}

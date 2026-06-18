@@ -14,6 +14,8 @@ import { Movie } from '@/core/entities/movie.entity';
 import { ThemedIcon } from '@/presentation/components/ui/ThemedIcon';
 import { ThemedText } from '@/presentation/components/ui/ThemedText';
 import { ThemedView } from '@/presentation/components/ui/ThemedView';
+import { pad2 } from '@/presentation/utils/format';
+import { EYEBROW_LG } from '@/presentation/constants/typography';
 import PosterCard from './PosterCard';
 
 interface Props {
@@ -29,8 +31,6 @@ const POSTER_WIDTH = 150;
 const GAP = 16;
 const SNAP = POSTER_WIDTH + GAP; // 166 — firma del scroll del carrusel
 const GUTTER = 24;
-
-const pad2 = (n: number) => String(n).padStart(2, '0');
 
 const AnimatedMovieList = Animated.FlatList<Movie>;
 
@@ -95,7 +95,7 @@ const SectionCarousel = ({
           ) : null}
           <ThemedText
             tone="accent"
-            style={{ fontSize: 13, letterSpacing: 3 }}
+            style={EYEBROW_LG}
             className="font-editorial uppercase">
             {title}
           </ThemedText>
